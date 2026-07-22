@@ -1,423 +1,446 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Наши Сборки — для своих</title>
-<meta name="description" content="Сборки Minecraft для друзей. Скачивай, играй, делись.">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-:root{
-  --bg-1:#0a0a1a; --bg-2:#1a0533;
-  --pink:#FF2D95; --cyan:#00D4FF; --gold:#FFD700;
-  --glass-bg: rgba(255,255,255,0.055);
-  --glass-bg-hover: rgba(255,255,255,0.09);
-  --glass-border: rgba(255,255,255,0.14);
-  --text:#f3f3fb; --text-dim:#a7a7c4;
-  --radius:20px; --radius-sm:12px;
-  --font-display:'Press Start 2P', cursive; --font-body:'Inter', sans-serif;
-}
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  margin:0; min-height:100vh; font-family:var(--font-body); color:var(--text);
-  background:
-    radial-gradient(ellipse at top left, rgba(255,45,149,0.08), transparent 55%),
-    radial-gradient(ellipse at bottom right, rgba(0,212,255,0.08), transparent 55%),
-    linear-gradient(160deg, var(--bg-1), var(--bg-2));
-  background-attachment:fixed; overflow-x:hidden;
-}
-.bg-glow{ position:fixed; width:520px;height:520px; border-radius:50%; filter:blur(120px); opacity:.25; z-index:0; pointer-events:none; animation:drift 18s ease-in-out infinite alternate; }
-.bg-glow--pink{ background:var(--pink); top:-120px; left:-120px; }
-.bg-glow--cyan{ background:var(--cyan); bottom:-160px; right:-100px; animation-delay:3s; }
-@keyframes drift{ from{ transform:translate(0,0) scale(1);} to{ transform:translate(40px,30px) scale(1.15);} }
-.container{ max-width:1280px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
-.site-header{ position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(10,10,26,0.55); border-bottom:1px solid var(--glass-border); }
-.header-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px 28px; }
-.logo{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text); }
-.logo-icon{ color:var(--gold); font-size:26px; filter:drop-shadow(0 0 12px rgba(255,215,0,.6)); }
-.logo-text{ font-family:var(--font-display); font-size:15px; letter-spacing:1px; }
-.logo-sub{ font-size:13px; color:var(--text-dim); font-weight:500; margin-left:4px; }
-.accent{ color:var(--pink); }
-.site-nav{ display:flex; align-items:center; gap:26px; }
-.nav-link{ color:var(--text-dim); text-decoration:none; font-weight:600; font-size:15px; transition:color .2s; }
-.nav-link:hover{ color:var(--cyan); }
-.nav-admin{ width:38px; height:38px; display:flex; align-items:center; justify-content:center; border:1px solid var(--glass-border); border-radius:50%; opacity:.55; font-size:16px; }
-.nav-admin:hover{ opacity:1; border-color:var(--pink); color:var(--pink); }
-main{ padding:48px 28px 80px; min-height:70vh; }
-.fade-in{ animation:fadeInUp .5s ease both; }
-@keyframes fadeInUp{ from{ opacity:0; transform:translateY(16px);} to{ opacity:1; transform:translateY(0);} }
-.page-title{ font-family:var(--font-display); font-size:22px; line-height:1.6; margin:0 0 6px; }
-.page-sub{ color:var(--text-dim); margin:0 0 36px; font-size:16px; }
-.friend-tag{ display:inline-block; background:rgba(255,215,0,.12); color:var(--gold); padding:3px 14px; border-radius:20px; font-size:12px; font-weight:600; border:1px solid rgba(255,215,0,.2); margin-bottom:10px; }
-.toolbar{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:36px; }
-.search-box{ flex:1; min-width:260px; display:flex; align-items:center; gap:12px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-sm); padding:14px 18px; }
-.search-box i{ color:var(--text-dim); font-size:16px; }
-.search-box input{ flex:1; background:none; border:none; outline:none; color:var(--text); font-family:var(--font-body); font-size:15px; }
-.tag-filter{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-.tag-chip{ padding:10px 16px; border-radius:20px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text-dim); font-size:14px; cursor:pointer; transition:.2s; font-weight:500; }
-.tag-chip:hover{ color:var(--text); }
-.tag-chip.active{ color:#0a0a1a; background:linear-gradient(90deg,var(--cyan),var(--pink)); border-color:transparent; font-weight:700; }
-.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:28px; }
-.card{ background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius); overflow:hidden; backdrop-filter:blur(16px); transition:transform .3s ease, box-shadow .3s ease, background .3s ease; display:flex; flex-direction:column; text-decoration:none; color:var(--text); }
-.card:hover{ transform:translateY(-8px); background:var(--glass-bg-hover); box-shadow:0 16px 48px -12px rgba(255,45,149,.4), 0 0 0 1px rgba(0,212,255,.15); }
-.card-img{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#111122; }
-.card-body{ padding:22px 22px 24px; display:flex; flex-direction:column; gap:12px; flex:1; }
-.card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
-.card-title{ font-size:18px; font-weight:800; margin:0; line-height:1.3; }
-.version-badge{ flex-shrink:0; font-size:12px; font-weight:700; padding:5px 12px; border-radius:8px; background:rgba(255,215,0,.12); color:var(--gold); border:1px solid rgba(255,215,0,.3); white-space:nowrap; }
-.card-desc{ font-size:15px; color:var(--text-dim); line-height:1.6; margin:0; flex:1; }
-.card-tags{ display:flex; flex-wrap:wrap; gap:8px; }
-.tag{ font-size:12px; padding:4px 12px; border-radius:14px; background:rgba(0,212,255,.1); color:var(--cyan); border:1px solid rgba(0,212,255,.25); }
-.card-meta{ display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-dim); }
-.btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 22px; border-radius:var(--radius-sm); font-family:var(--font-body); font-weight:700; font-size:15px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text); cursor:pointer; text-decoration:none; transition:.25s; }
-.btn:hover{ transform:translateY(-2px); }
-.btn-primary{ background:linear-gradient(90deg,var(--pink),var(--cyan)); border:none; color:#0a0a14; }
-.btn-primary:hover{ box-shadow:0 10px 28px -6px rgba(255,45,149,.6); }
-.btn-gold{ background:linear-gradient(90deg,var(--gold),#ffb300); border:none; color:#20150a; }
-.btn-gold:hover{ box-shadow:0 10px 28px -6px rgba(255,215,0,.55); }
-.btn-outline{ background:transparent; }
-.btn-outline:hover{ border-color:var(--cyan); color:var(--cyan); }
-.btn-danger{ border-color:rgba(255,80,80,.4); color:#ff8080; background:rgba(255,80,80,.08); }
-.btn-danger:hover{ background:rgba(255,80,80,.18); }
-.btn-block{ width:100%; }
-.btn-sm{ padding:10px 16px; font-size:13.5px; }
-.btn-lg{ padding:16px 28px; font-size:17px; }
-.detail-hero{ display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-bottom:48px; }
-.detail-img{ width:100%; border-radius:var(--radius); border:1px solid var(--glass-border); aspect-ratio:16/10; object-fit:cover; }
-.detail-info h1{ font-size:28px; margin:0 0 8px; }
-.detail-info .version-badge{ margin-bottom:16px; display:inline-block; }
-.detail-desc{ color:var(--text-dim); line-height:1.8; font-size:16px; }
-.detail-tags{ display:flex; gap:10px; flex-wrap:wrap; margin:18px 0; }
-.detail-date{ font-size:14px; color:var(--text-dim); }
-.files-section{ margin-top:40px; }
-.section-heading{ font-family:var(--font-display); font-size:16px; margin-bottom:22px; }
-.file-row{ display:flex; align-items:center; gap:18px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-sm); padding:16px 20px; margin-bottom:14px; transition:.2s; }
-.file-row:hover{ background:var(--glass-bg-hover); border-color:rgba(0,212,255,.3); }
-.file-icon{ width:48px; height:48px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-radius:12px; font-size:20px; background:rgba(255,45,149,.12); color:var(--pink); }
-.file-info{ flex:1; min-width:0; }
-.file-name{ font-weight:700; font-size:15px; word-break:break-all; }
-.file-sub{ font-size:13px; color:var(--text-dim); }
-.back-link{ display:inline-flex; align-items:center; gap:10px; color:var(--text-dim); text-decoration:none; font-size:14.5px; margin-bottom:28px; }
-.back-link:hover{ color:var(--cyan); }
-.admin-login{ max-width:400px; margin:60px auto; text-align:center; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius); padding:44px 36px; }
-.admin-login i{ font-size:34px; color:var(--gold); margin-bottom:16px; }
-.field{ margin-bottom:20px; text-align:left; }
-.field label{ display:block; font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text-dim); }
-.field input, .field textarea, .field select{ width:100%; padding:13px 16px; border-radius:var(--radius-sm); background:rgba(255,255,255,.04); border:1px solid var(--glass-border); color:var(--text); font-family:var(--font-body); font-size:15px; outline:none; transition:border-color .2s; }
-.field input:focus, .field textarea:focus, .field select:focus{ border-color:var(--cyan); }
-.field textarea{ resize:vertical; min-height:100px; }
-.error-msg{ color:#ff6b6b; font-size:14px; margin-top:10px; min-height:18px; }
-.admin-panel{ display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start; }
-.admin-card{ background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius); padding:30px; }
-.file-upload-row{ display:grid; grid-template-columns:1fr 100px 1fr auto; gap:10px; margin-bottom:12px; align-items:center; }
-.admin-list-item{ display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border:1px solid var(--glass-border); border-radius:var(--radius-sm); margin-bottom:12px; gap:12px; }
-.admin-list-item .title{ font-weight:700; font-size:15px; }
-.admin-list-item .sub{ font-size:13px; color:var(--text-dim); }
-.row-actions{ display:flex; gap:10px; flex-shrink:0; }
-.toast{ position:fixed; bottom:28px; right:28px; z-index:100; background:var(--glass-bg-hover); border:1px solid var(--glass-border); backdrop-filter:blur(14px); padding:16px 24px; border-radius:var(--radius-sm); font-size:15px; animation:fadeInUp .3s ease both; }
-.toast.ok{ border-color:rgba(0,212,255,.4); }
-.toast.err{ border-color:rgba(255,80,80,.4); }
-.empty-state{ text-align:center; padding:80px 20px; color:var(--text-dim); }
-.empty-state i{ font-size:36px; margin-bottom:16px; color:var(--pink); opacity:.7; }
-.footer-note{ font-size:13px; color:var(--text-dim); margin-top:18px; line-height:1.6; }
-.site-footer{ border-top:1px solid var(--glass-border); padding:28px; text-align:center; color:var(--text-dim); font-size:14px; position:relative; z-index:1; }
-.site-footer i{ color:var(--pink); }
-@media (max-width:820px){ .detail-hero{ grid-template-columns:1fr;} .admin-panel{ grid-template-columns:1fr;} .file-upload-row{ grid-template-columns:1fr;} }
-@media (max-width:520px){ .logo-text{ font-size:12px;} .page-title{ font-size:18px;} .grid{ grid-template-columns:1fr;} }
-:focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; }
-</style>
-</head>
-<body>
-
-<div class="bg-glow bg-glow--pink"></div>
-<div class="bg-glow bg-glow--cyan"></div>
-
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="#/" class="logo">
-      <i class="fa-solid fa-cube logo-icon"></i>
-      <span class="logo-text">CRAFT<span class="accent">HUB</span></span>
-      <span class="logo-sub">✦ для своих</span>
-    </a>
-    <nav class="site-nav">
-      <a href="#/" class="nav-link">Сборки</a>
-      <a href="#/admin" class="nav-link nav-admin" title="Панель управления"><i class="fa-solid fa-lock"></i></a>
-    </nav>
-  </div>
-</header>
-
-<main id="app" class="container fade-in"></main>
-
-<footer class="site-footer">
-  <div class="container">💜 Сделано для наших — качайте, играйте, делитесь</div>
-</footer>
-
-<script>
-/* ================= ДАННЫЕ ================= */
-const LS_BUILDS='mcb_builds_v1', LS_PASS='mcb_admin_pass_v1', SS_AUTH='mcb_admin_auth', DEFAULT_PASSWORD='admin123';
-
-const SEED_BUILDS=[
- {id:'seed_1',title:'SkyBlock Reforged',version:'1.20.1',
-  shortDesc:'Атмосферная скайблок-сборка с магией и технологиями.',
-  fullDesc:'SkyBlock Reforged — сборка на 90+ модов: технологии (Applied Energistics, Mekanism), магия (Ars Nouveau) и продуманная система квестов. Оптимизирована под слабые ПК.',
-  image:'https://placehold.co/800x450/1a0533/FF2D95?text=SkyBlock+Reforged',
-  tags:['skyblock','техно','магия'], date:'2026-06-12',
-  files:[
-   {id:'f1',name:'SkyBlockReforged-v3.2.mrpack',url:'files/skyblock-reforged-v3.2.mrpack',size:52428800,downloads:0},
-   {id:'f2',name:'server-pack.zip',url:'files/skyblock-reforged-server.zip',size:47185920,downloads:0}
-  ]},
- {id:'seed_2',title:'Horror Nights',version:'1.19.2',
-  shortDesc:'Хоррор-приключение с новыми мобами и напряжённой атмосферой.',
-  fullDesc:'Horror Nights добавляет новых мобов, звуковой дизайн и систему рассудка. Подходит для одиночного прохождения или кооператива до 4 игроков.',
-  image:'https://placehold.co/800x450/0a0a1a/00D4FF?text=Horror+Nights',
-  tags:['хоррор','сюжет','кооп'], date:'2026-05-28',
-  files:[{id:'f3',name:'HorrorNights-1.4.zip',url:'files/horror-nights-1.4.zip',size:31457280,downloads:0}]}
-];
-
-function escapeHtml(s){ if(s===undefined||s===null) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
-function formatBytes(b){ if(!b) return '—'; const u=['Б','КБ','МБ','ГБ']; let i=0,v=b; while(v>=1024&&i<u.length-1){v/=1024;i++;} return `${v.toFixed(v<10&&i>0?1:0)} ${u[i]}`; }
-function formatDate(iso){ try{ return new Date(iso).toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'}); }catch(e){ return iso; } }
-function genId(p='b'){ return `${p}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`; }
-
-function initData(){ if(!localStorage.getItem(LS_BUILDS)) saveBuilds(SEED_BUILDS); }
-function loadBuilds(){ try{ return JSON.parse(localStorage.getItem(LS_BUILDS))||[]; }catch(e){ return []; } }
-function saveBuilds(b){ localStorage.setItem(LS_BUILDS, JSON.stringify(b)); }
-function getBuild(id){ return loadBuilds().find(b=>b.id===id)||null; }
-function upsertBuild(build){ const b=loadBuilds(); const i=b.findIndex(x=>x.id===build.id); if(i>=0) b[i]=build; else b.unshift(build); saveBuilds(b); }
-function deleteBuild(id){ saveBuilds(loadBuilds().filter(b=>b.id!==id)); }
-function incrementDownload(bid,fid){ const b=loadBuilds(); const build=b.find(x=>x.id===bid); if(!build) return; const f=build.files.find(x=>x.id===fid); if(!f) return; f.downloads=(f.downloads||0)+1; saveBuilds(b); }
-function getAllTags(){ const s=new Set(); loadBuilds().forEach(b=>(b.tags||[]).forEach(t=>s.add(t))); return [...s]; }
-function checkPassword(p){ return p===(localStorage.getItem(LS_PASS)||DEFAULT_PASSWORD); }
-function setPassword(p){ localStorage.setItem(LS_PASS,p); }
-function isAdminAuthed(){ return sessionStorage.getItem(SS_AUTH)==='true'; }
-function setAdminAuthed(v){ if(v) sessionStorage.setItem(SS_AUTH,'true'); else sessionStorage.removeItem(SS_AUTH); }
-function fileIcon(name){ const ext=(name.split('.').pop()||'').toLowerCase(); return {zip:'fa-file-zipper',mrpack:'fa-box-archive',jar:'fa-mug-hot',json:'fa-file-code'}[ext]||'fa-file-arrow-down'; }
-function exportBuildsJson(){ const data=JSON.stringify(loadBuilds(),null,2); const blob=new Blob([data],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='builds.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
-
-/* ================= РОУТИНГ ================= */
-const app=document.getElementById('app');
-function navigate(){
-  app.classList.remove('fade-in'); void app.offsetWidth; app.classList.add('fade-in');
-  const hash=location.hash||'#/';
-  if(hash==='#/'){ renderHome(); }
-  else if(hash.startsWith('#/build/')){ renderBuildDetail(decodeURIComponent(hash.split('/')[2])); }
-  else if(hash==='#/admin'){ renderAdmin(); }
-  else{ renderHome(); }
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-window.addEventListener('hashchange', navigate);
-window.addEventListener('DOMContentLoaded', ()=>{ initData(); navigate(); });
-
-function toast(msg,type='ok'){ const el=document.createElement('div'); el.className=`toast ${type}`; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2600); }
-
-/* ================= ГЛАВНАЯ ================= */
-let activeTag=null, searchQuery='';
-function renderHome(){
-  const tags=getAllTags();
-  app.innerHTML=`
-    <div class="friend-tag"><i class="fa-solid fa-users"></i> только для наших</div>
-    <h1 class="page-title">Сборки Minecraft</h1>
-    <p class="page-sub">Скачивай модпаки для себя и друзей — всё бесплатно и без регистрации</p>
-    <div class="toolbar">
-      <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" placeholder="Поиск по названию или тегу..." value="${escapeHtml(searchQuery)}">
-      </div>
-      <div class="tag-filter" id="tagFilter">
-        <div class="tag-chip ${activeTag===null?'active':''}" data-tag="">Все</div>
-        ${tags.map(t=>`<div class="tag-chip ${activeTag===t?'active':''}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</div>`).join('')}
-      </div>
-    </div>
-    <div id="grid" class="grid"></div>`;
-  document.getElementById('searchInput').addEventListener('input', e=>{ searchQuery=e.target.value; renderGrid(); });
-  document.querySelectorAll('.tag-chip').forEach(chip=>chip.addEventListener('click', ()=>{ activeTag=chip.dataset.tag||null; renderHome(); }));
-  renderGrid();
-}
-function renderGrid(){
-  const grid=document.getElementById('grid'); if(!grid) return;
-  let builds=loadBuilds();
-  if(activeTag) builds=builds.filter(b=>(b.tags||[]).includes(activeTag));
-  if(searchQuery.trim()){ const q=searchQuery.trim().toLowerCase(); builds=builds.filter(b=>b.title.toLowerCase().includes(q)||(b.tags||[]).some(t=>t.toLowerCase().includes(q))); }
-  if(!builds.length){ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-box-open"></i><p>Сборок нет — добавь первую!</p></div>`; return; }
-  grid.innerHTML=builds.map((b,i)=>`
-    <a href="#/build/${encodeURIComponent(b.id)}" class="card" style="animation-delay:${i*0.05}s">
-      <img class="card-img" src="${escapeHtml(b.image)}" alt="${escapeHtml(b.title)}" loading="lazy" onerror="this.src='https://placehold.co/800x450/1a0533/FFD700?text=No+Image'">
-      <div class="card-body">
-        <div class="card-top"><h3 class="card-title">${escapeHtml(b.title)}</h3><span class="version-badge">${escapeHtml(b.version)}</span></div>
-        <p class="card-desc">${escapeHtml(b.shortDesc)}</p>
-        <div class="card-tags">${(b.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
-        <div class="card-meta"><span><i class="fa-regular fa-calendar"></i> ${formatDate(b.date)}</span><span><i class="fa-solid fa-download"></i> ${(b.files||[]).reduce((s,f)=>s+(f.downloads||0),0)}</span></div>
-      </div>
-    </a>`).join('');
-}
-
-/* ================= СТРАНИЦА СБОРКИ ================= */
-function renderBuildDetail(id){
-  const b=getBuild(id);
-  if(!b){ app.innerHTML=`<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Сборка не найдена.</p><a href="#/" class="btn btn-outline" style="margin-top:14px;">На главную</a></div>`; return; }
-  app.innerHTML=`
-    <a href="#/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Все сборки</a>
-    <div class="detail-hero">
-      <img class="detail-img" src="${escapeHtml(b.image)}" alt="${escapeHtml(b.title)}" onerror="this.src='https://placehold.co/800x450/1a0533/FFD700?text=No+Image'">
-      <div class="detail-info">
-        <span class="version-badge">Minecraft ${escapeHtml(b.version)}</span>
-        <h1>${escapeHtml(b.title)}</h1>
-        <p class="detail-desc">${escapeHtml(b.fullDesc)}</p>
-        <div class="detail-tags">${(b.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
-        <div class="detail-date"><i class="fa-regular fa-calendar"></i> Добавлено ${formatDate(b.date)}</div>
-      </div>
-    </div>
-    <div class="files-section"><h2 class="section-heading">📦 Файлы для скачивания</h2><div id="fileList"></div></div>`;
-  renderFileList(b);
-}
-function renderFileList(b){
-  const wrap=document.getElementById('fileList');
-  if(!b.files||!b.files.length){ wrap.innerHTML=`<p class="page-sub">Файлов пока нет — скоро добавлю 😉</p>`; return; }
-  wrap.innerHTML=b.files.map(f=>`
-    <div class="file-row">
-      <div class="file-icon"><i class="fa-solid ${fileIcon(f.name)}"></i></div>
-      <div class="file-info"><div class="file-name">${escapeHtml(f.name)}</div><div class="file-sub">${formatBytes(f.size)} · скачано ${f.downloads||0} раз</div></div>
-      <button class="btn btn-primary btn-sm" data-file="${f.id}"><i class="fa-solid fa-download"></i> Скачать</button>
-    </div>`).join('');
-  wrap.querySelectorAll('button[data-file]').forEach(btn=>btn.addEventListener('click', ()=>downloadFile(b.id, btn.dataset.file)));
-}
-function downloadFile(bid,fid){
-  const b=getBuild(bid); const f=b.files.find(x=>x.id===fid); if(!f) return;
-  const a=document.createElement('a'); a.href=f.data||f.url; a.download=f.name; document.body.appendChild(a); a.click(); a.remove();
-  incrementDownload(bid,fid); renderFileList(getBuild(bid));
-}
-
-/* ================= АДМИН ================= */
-function renderAdmin(){ isAdminAuthed()?renderAdminDashboard():renderAdminLogin(); }
-function renderAdminLogin(){
-  app.innerHTML=`
-    <div class="admin-login">
-      <i class="fa-solid fa-user-shield"></i>
-      <h2 class="page-title" style="font-size:18px;">Вход для своих</h2>
-      <p class="page-sub" style="margin-bottom:16px;">Спроси пароль у того, кто создал сайт 😉</p>
-      <div class="field" style="margin-top:16px;"><label>Пароль</label><input type="password" id="adminPass" placeholder="••••••••"></div>
-      <button class="btn btn-primary btn-block btn-lg" id="loginBtn">Войти</button>
-      <div class="error-msg" id="loginError"></div>
-      <p class="footer-note">Пароль по умолчанию: <b>admin123</b> — смени его сразу!</p>
-    </div>`;
-  const tryLogin=()=>{ const pass=document.getElementById('adminPass').value; if(checkPassword(pass)){ setAdminAuthed(true); renderAdmin(); } else { document.getElementById('loginError').textContent='Неверный пароль, братан 😅'; } };
-  document.getElementById('loginBtn').addEventListener('click', tryLogin);
-  document.getElementById('adminPass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryLogin(); });
-}
-let editingId=null, draftFiles=[];
-function renderAdminDashboard(){
-  const builds=loadBuilds();
-  app.innerHTML=`
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
-      <div><h1 class="page-title">👑 Для админа</h1><p class="page-sub" style="margin-bottom:0;">Добавляй сборки, чтобы друзья качали</p></div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-gold" id="exportBtn"><i class="fa-solid fa-file-export"></i> Бэкап</button>
-        <button class="btn btn-outline" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button>
-      </div>
-    </div>
-    <div class="admin-panel">
-      <div class="admin-card">
-        <h3 class="section-heading">${editingId?'✏️ Редактируем':'✨ Новая сборка'}</h3>
-        <form id="buildForm">
-          <div class="field"><label>Название</label><input required id="f_title" placeholder="Например, SkyBlock Reforged"></div>
-          <div class="field"><label>Версия Minecraft</label><input required id="f_version" placeholder="1.20.1"></div>
-          <div class="field"><label>Краткое описание</label><input required id="f_short" placeholder="Одна строка для карточки"></div>
-          <div class="field"><label>Полное описание</label><textarea required id="f_full" placeholder="Подробности сборки..."></textarea></div>
-          <div class="field"><label>Ссылка на превью-изображение</label><input required id="f_image" placeholder="https://... (можно imgur.com)"></div>
-          <div class="field"><label>Теги (через запятую)</label><input id="f_tags" placeholder="техно, магия, хоррор"></div>
-          <div class="field">
-            <label>Файлы (.zip, .mrpack, .jar, .json)</label>
-            <div id="fileRows"></div>
-            <button type="button" class="btn btn-outline btn-sm" id="addFileRow"><i class="fa-solid fa-plus"></i> Добавить файл</button>
-            <p class="footer-note">📁 Загружай файлы через кнопку «Файл» (до 5 МБ в сумме). Для больших модпаков положи файл в папку <b>/files</b> репозитория и укажи ссылку вида <b>files/имя.zip</b></p>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:10px;"><i class="fa-solid fa-rocket"></i> ${editingId?'Сохранить':'Опубликовать'}</button>
-          ${editingId?'<button type="button" id="cancelEdit" class="btn btn-outline btn-block" style="margin-top:10px;">Отменить</button>':''}
-        </form>
-      </div>
-      <div class="admin-card">
-        <h3 class="section-heading">📋 Все сборки (${builds.length})</h3>
-        <div id="adminList">
-          ${builds.length?builds.map(b=>`
-            <div class="admin-list-item">
-              <div><div class="title">${escapeHtml(b.title)}</div><div class="sub">${escapeHtml(b.version)} · ${(b.files||[]).length} файл(ов)</div></div>
-              <div class="row-actions">
-                <button class="btn btn-outline btn-sm" data-edit="${b.id}"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn btn-danger btn-sm" data-del="${b.id}"><i class="fa-solid fa-trash"></i></button>
-              </div>
-            </div>`).join(''):'<p class="page-sub">Пока пусто. Добавь первую сборку!</p>'}
-        </div>
-        <h3 class="section-heading" style="margin-top:28px;">🔑 Настройки</h3>
-        <div class="field"><label>Новый пароль (для входа в админку)</label><input type="password" id="newPass" placeholder="Придумай новый пароль"></div>
-        <button class="btn btn-outline btn-block" id="savePassBtn">Сменить пароль</button>
-        <p class="footer-note" style="margin-top:12px;">⚠️ Не потеряй пароль! Если забудешь — придётся чистить localStorage в браузере.</p>
-      </div>
-    </div>`;
-  draftFiles=editingId?[...getBuild(editingId).files]:[];
-  renderFileRows();
-  if(editingId){
-    const b=getBuild(editingId);
-    document.getElementById('f_title').value=b.title;
-    document.getElementById('f_version').value=b.version;
-    document.getElementById('f_short').value=b.shortDesc;
-    document.getElementById('f_full').value=b.fullDesc;
-    document.getElementById('f_image').value=b.image;
-    document.getElementById('f_tags').value=(b.tags||[]).join(', ');
-  }
-  document.getElementById('addFileRow').addEventListener('click', ()=>{ draftFiles.push({id:genId('f'),name:'',url:'',data:null,size:0,downloads:0}); renderFileRows(); });
-  document.getElementById('buildForm').addEventListener('submit', onSubmitBuild);
-  document.getElementById('exportBtn').addEventListener('click', ()=>{ exportBuildsJson(); toast('Бэкап скачан ✅'); });
-  document.getElementById('logoutBtn').addEventListener('click', ()=>{ setAdminAuthed(false); location.hash='#/'; });
-  document.getElementById('savePassBtn').addEventListener('click', ()=>{ const val=document.getElementById('newPass').value.trim(); if(val.length<4){ toast('Пароль слишком короткий, сделай 4+ символов','err'); return; } setPassword(val); toast('Пароль обновлён 🔒'); document.getElementById('newPass').value=''; });
-  document.querySelectorAll('[data-edit]').forEach(btn=>btn.addEventListener('click', ()=>{ editingId=btn.dataset.edit; renderAdminDashboard(); window.scrollTo({top:0,behavior:'smooth'}); }));
-  document.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click', ()=>{ if(confirm('Точно удалить? Без возврата!')){ deleteBuild(btn.dataset.del); if(editingId===btn.dataset.del) editingId=null; toast('Сборка удалена'); renderAdminDashboard(); } }));
-  const cancelBtn=document.getElementById('cancelEdit'); if(cancelBtn) cancelBtn.addEventListener('click', ()=>{ editingId=null; renderAdminDashboard(); });
-}
-function renderFileRows(){
-  const wrap=document.getElementById('fileRows'); if(!wrap) return;
-  if(!draftFiles.length){ wrap.innerHTML='<p class="footer-note" style="margin:6px 0 12px;">Файлов пока нет. Добавь!</p>'; return; }
-  wrap.innerHTML=draftFiles.map((f,i)=>`
-    <div class="file-upload-row">
-      <input placeholder="Имя файла" value="${escapeHtml(f.name)}" data-idx="${i}" class="fr-name">
-      <input type="file" data-idx="${i}" class="fr-file" accept=".zip,.mrpack,.jar,.json">
-      <input placeholder="или ссылка: files/имя.zip" value="${escapeHtml(f.url||'')}" data-idx="${i}" class="fr-url">
-      <button type="button" class="btn btn-danger btn-sm" data-idx="${i}" title="Удалить"><i class="fa-solid fa-xmark"></i></button>
-    </div>`).join('');
-  wrap.querySelectorAll('.fr-name').forEach(inp=>inp.addEventListener('input', e=>{ draftFiles[+e.target.dataset.idx].name=e.target.value; }));
-  wrap.querySelectorAll('.fr-url').forEach(inp=>inp.addEventListener('input', e=>{ draftFiles[+e.target.dataset.idx].url=e.target.value; draftFiles[+e.target.dataset.idx].data=null; }));
-  wrap.querySelectorAll('.fr-file').forEach(inp=>inp.addEventListener('change', e=>{
-    const idx=+e.target.dataset.idx; const file=e.target.files[0]; if(!file) return;
-    const reader=new FileReader();
-    reader.onload=()=>{ draftFiles[idx].data=reader.result; draftFiles[idx].size=file.size; draftFiles[idx].url=''; if(!draftFiles[idx].name) draftFiles[idx].name=file.name; renderFileRows(); toast(`Файл «${file.name}» загружен (${formatBytes(file.size)})`); };
-    reader.onerror=()=>toast('Не удалось прочитать файл','err');
-    reader.readAsDataURL(file);
-  }));
-  wrap.querySelectorAll('button[data-idx]').forEach(btn=>btn.addEventListener('click', e=>{ draftFiles.splice(+e.currentTarget.dataset.idx,1); renderFileRows(); }));
-}
-function onSubmitBuild(e){
-  e.preventDefault();
-  const files=draftFiles.filter(f=>f.name&&(f.url||f.data)).map(f=>({...f,downloads:f.downloads||0}));
-  const build={
-    id:editingId||genId('b'),
-    title:document.getElementById('f_title').value.trim(),
-    version:document.getElementById('f_version').value.trim(),
-    shortDesc:document.getElementById('f_short').value.trim(),
-    fullDesc:document.getElementById('f_full').value.trim(),
-    image:document.getElementById('f_image').value.trim(),
-    tags:document.getElementById('f_tags').value.split(',').map(t=>t.trim()).filter(Boolean),
-    date:editingId?getBuild(editingId).date:new Date().toISOString().slice(0,10),
-    files
-  };
-  upsertBuild(build);
-  toast(editingId?'✅ Изменения сохранены':'✅ Сборка опубликована! Друзья увидят');
-  editingId=null;
-  renderAdminDashboard();
-}
-</script>
-</body>
-</html>
+diff --git a/index.html b/index.html
+index 34628840f0385a7e5fa556eac1a1b6d62b97c8f4..d8fa215e61740f794fcf0802472b889cfaf379ad 100644
+--- a/index.html
++++ b/index.html
+@@ -1,423 +1,35 @@
+ <!DOCTYPE html>
+ <html lang="ru">
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Наши Сборки — для своих</title>
+-<meta name="description" content="Сборки Minecraft для друзей. Скачивай, играй, делись.">
+-
++<title>Сборки для друзей — Minecraft без душноты</title>
++<meta name="description" content="Лёгкий сайт для Minecraft-сборок: залил модпак, кинул друзьям ссылку, все счастливы.">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+-
+ <style>
+-:root{
+-  --bg-1:#0a0a1a; --bg-2:#1a0533;
+-  --pink:#FF2D95; --cyan:#00D4FF; --gold:#FFD700;
+-  --glass-bg: rgba(255,255,255,0.055);
+-  --glass-bg-hover: rgba(255,255,255,0.09);
+-  --glass-border: rgba(255,255,255,0.14);
+-  --text:#f3f3fb; --text-dim:#a7a7c4;
+-  --radius:20px; --radius-sm:12px;
+-  --font-display:'Press Start 2P', cursive; --font-body:'Inter', sans-serif;
+-}
+-*{box-sizing:border-box;}
+-html{scroll-behavior:smooth;}
+-body{
+-  margin:0; min-height:100vh; font-family:var(--font-body); color:var(--text);
+-  background:
+-    radial-gradient(ellipse at top left, rgba(255,45,149,0.08), transparent 55%),
+-    radial-gradient(ellipse at bottom right, rgba(0,212,255,0.08), transparent 55%),
+-    linear-gradient(160deg, var(--bg-1), var(--bg-2));
+-  background-attachment:fixed; overflow-x:hidden;
+-}
+-.bg-glow{ position:fixed; width:520px;height:520px; border-radius:50%; filter:blur(120px); opacity:.25; z-index:0; pointer-events:none; animation:drift 18s ease-in-out infinite alternate; }
+-.bg-glow--pink{ background:var(--pink); top:-120px; left:-120px; }
+-.bg-glow--cyan{ background:var(--cyan); bottom:-160px; right:-100px; animation-delay:3s; }
+-@keyframes drift{ from{ transform:translate(0,0) scale(1);} to{ transform:translate(40px,30px) scale(1.15);} }
+-.container{ max-width:1280px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
+-.site-header{ position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(10,10,26,0.55); border-bottom:1px solid var(--glass-border); }
+-.header-inner{ display:flex; align-items:center; justify-content:space-between; padding:18px 28px; }
+-.logo{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text); }
+-.logo-icon{ color:var(--gold); font-size:26px; filter:drop-shadow(0 0 12px rgba(255,215,0,.6)); }
+-.logo-text{ font-family:var(--font-display); font-size:15px; letter-spacing:1px; }
+-.logo-sub{ font-size:13px; color:var(--text-dim); font-weight:500; margin-left:4px; }
+-.accent{ color:var(--pink); }
+-.site-nav{ display:flex; align-items:center; gap:26px; }
+-.nav-link{ color:var(--text-dim); text-decoration:none; font-weight:600; font-size:15px; transition:color .2s; }
+-.nav-link:hover{ color:var(--cyan); }
+-.nav-admin{ width:38px; height:38px; display:flex; align-items:center; justify-content:center; border:1px solid var(--glass-border); border-radius:50%; opacity:.55; font-size:16px; }
+-.nav-admin:hover{ opacity:1; border-color:var(--pink); color:var(--pink); }
+-main{ padding:48px 28px 80px; min-height:70vh; }
+-.fade-in{ animation:fadeInUp .5s ease both; }
+-@keyframes fadeInUp{ from{ opacity:0; transform:translateY(16px);} to{ opacity:1; transform:translateY(0);} }
+-.page-title{ font-family:var(--font-display); font-size:22px; line-height:1.6; margin:0 0 6px; }
+-.page-sub{ color:var(--text-dim); margin:0 0 36px; font-size:16px; }
+-.friend-tag{ display:inline-block; background:rgba(255,215,0,.12); color:var(--gold); padding:3px 14px; border-radius:20px; font-size:12px; font-weight:600; border:1px solid rgba(255,215,0,.2); margin-bottom:10px; }
+-.toolbar{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:36px; }
+-.search-box{ flex:1; min-width:260px; display:flex; align-items:center; gap:12px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-sm); padding:14px 18px; }
+-.search-box i{ color:var(--text-dim); font-size:16px; }
+-.search-box input{ flex:1; background:none; border:none; outline:none; color:var(--text); font-family:var(--font-body); font-size:15px; }
+-.tag-filter{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+-.tag-chip{ padding:10px 16px; border-radius:20px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text-dim); font-size:14px; cursor:pointer; transition:.2s; font-weight:500; }
+-.tag-chip:hover{ color:var(--text); }
+-.tag-chip.active{ color:#0a0a1a; background:linear-gradient(90deg,var(--cyan),var(--pink)); border-color:transparent; font-weight:700; }
+-.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:28px; }
+-.card{ background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius); overflow:hidden; backdrop-filter:blur(16px); transition:transform .3s ease, box-shadow .3s ease, background .3s ease; display:flex; flex-direction:column; text-decoration:none; color:var(--text); }
+-.card:hover{ transform:translateY(-8px); background:var(--glass-bg-hover); box-shadow:0 16px 48px -12px rgba(255,45,149,.4), 0 0 0 1px rgba(0,212,255,.15); }
+-.card-img{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#111122; }
+-.card-body{ padding:22px 22px 24px; display:flex; flex-direction:column; gap:12px; flex:1; }
+-.card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+-.card-title{ font-size:18px; font-weight:800; margin:0; line-height:1.3; }
+-.version-badge{ flex-shrink:0; font-size:12px; font-weight:700; padding:5px 12px; border-radius:8px; background:rgba(255,215,0,.12); color:var(--gold); border:1px solid rgba(255,215,0,.3); white-space:nowrap; }
+-.card-desc{ font-size:15px; color:var(--text-dim); line-height:1.6; margin:0; flex:1; }
+-.card-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+-.tag{ font-size:12px; padding:4px 12px; border-radius:14px; background:rgba(0,212,255,.1); color:var(--cyan); border:1px solid rgba(0,212,255,.25); }
+-.card-meta{ display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-dim); }
+-.btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 22px; border-radius:var(--radius-sm); font-family:var(--font-body); font-weight:700; font-size:15px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text); cursor:pointer; text-decoration:none; transition:.25s; }
+-.btn:hover{ transform:translateY(-2px); }
+-.btn-primary{ background:linear-gradient(90deg,var(--pink),var(--cyan)); border:none; color:#0a0a14; }
+-.btn-primary:hover{ box-shadow:0 10px 28px -6px rgba(255,45,149,.6); }
+-.btn-gold{ background:linear-gradient(90deg,var(--gold),#ffb300); border:none; color:#20150a; }
+-.btn-gold:hover{ box-shadow:0 10px 28px -6px rgba(255,215,0,.55); }
+-.btn-outline{ background:transparent; }
+-.btn-outline:hover{ border-color:var(--cyan); color:var(--cyan); }
+-.btn-danger{ border-color:rgba(255,80,80,.4); color:#ff8080; background:rgba(255,80,80,.08); }
+-.btn-danger:hover{ background:rgba(255,80,80,.18); }
+-.btn-block{ width:100%; }
+-.btn-sm{ padding:10px 16px; font-size:13.5px; }
+-.btn-lg{ padding:16px 28px; font-size:17px; }
+-.detail-hero{ display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-bottom:48px; }
+-.detail-img{ width:100%; border-radius:var(--radius); border:1px solid var(--glass-border); aspect-ratio:16/10; object-fit:cover; }
+-.detail-info h1{ font-size:28px; margin:0 0 8px; }
+-.detail-info .version-badge{ margin-bottom:16px; display:inline-block; }
+-.detail-desc{ color:var(--text-dim); line-height:1.8; font-size:16px; }
+-.detail-tags{ display:flex; gap:10px; flex-wrap:wrap; margin:18px 0; }
+-.detail-date{ font-size:14px; color:var(--text-dim); }
+-.files-section{ margin-top:40px; }
+-.section-heading{ font-family:var(--font-display); font-size:16px; margin-bottom:22px; }
+-.file-row{ display:flex; align-items:center; gap:18px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius-sm); padding:16px 20px; margin-bottom:14px; transition:.2s; }
+-.file-row:hover{ background:var(--glass-bg-hover); border-color:rgba(0,212,255,.3); }
+-.file-icon{ width:48px; height:48px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-radius:12px; font-size:20px; background:rgba(255,45,149,.12); color:var(--pink); }
+-.file-info{ flex:1; min-width:0; }
+-.file-name{ font-weight:700; font-size:15px; word-break:break-all; }
+-.file-sub{ font-size:13px; color:var(--text-dim); }
+-.back-link{ display:inline-flex; align-items:center; gap:10px; color:var(--text-dim); text-decoration:none; font-size:14.5px; margin-bottom:28px; }
+-.back-link:hover{ color:var(--cyan); }
+-.admin-login{ max-width:400px; margin:60px auto; text-align:center; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius); padding:44px 36px; }
+-.admin-login i{ font-size:34px; color:var(--gold); margin-bottom:16px; }
+-.field{ margin-bottom:20px; text-align:left; }
+-.field label{ display:block; font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text-dim); }
+-.field input, .field textarea, .field select{ width:100%; padding:13px 16px; border-radius:var(--radius-sm); background:rgba(255,255,255,.04); border:1px solid var(--glass-border); color:var(--text); font-family:var(--font-body); font-size:15px; outline:none; transition:border-color .2s; }
+-.field input:focus, .field textarea:focus, .field select:focus{ border-color:var(--cyan); }
+-.field textarea{ resize:vertical; min-height:100px; }
+-.error-msg{ color:#ff6b6b; font-size:14px; margin-top:10px; min-height:18px; }
+-.admin-panel{ display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start; }
+-.admin-card{ background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:var(--radius); padding:30px; }
+-.file-upload-row{ display:grid; grid-template-columns:1fr 100px 1fr auto; gap:10px; margin-bottom:12px; align-items:center; }
+-.admin-list-item{ display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border:1px solid var(--glass-border); border-radius:var(--radius-sm); margin-bottom:12px; gap:12px; }
+-.admin-list-item .title{ font-weight:700; font-size:15px; }
+-.admin-list-item .sub{ font-size:13px; color:var(--text-dim); }
+-.row-actions{ display:flex; gap:10px; flex-shrink:0; }
+-.toast{ position:fixed; bottom:28px; right:28px; z-index:100; background:var(--glass-bg-hover); border:1px solid var(--glass-border); backdrop-filter:blur(14px); padding:16px 24px; border-radius:var(--radius-sm); font-size:15px; animation:fadeInUp .3s ease both; }
+-.toast.ok{ border-color:rgba(0,212,255,.4); }
+-.toast.err{ border-color:rgba(255,80,80,.4); }
+-.empty-state{ text-align:center; padding:80px 20px; color:var(--text-dim); }
+-.empty-state i{ font-size:36px; margin-bottom:16px; color:var(--pink); opacity:.7; }
+-.footer-note{ font-size:13px; color:var(--text-dim); margin-top:18px; line-height:1.6; }
+-.site-footer{ border-top:1px solid var(--glass-border); padding:28px; text-align:center; color:var(--text-dim); font-size:14px; position:relative; z-index:1; }
+-.site-footer i{ color:var(--pink); }
+-@media (max-width:820px){ .detail-hero{ grid-template-columns:1fr;} .admin-panel{ grid-template-columns:1fr;} .file-upload-row{ grid-template-columns:1fr;} }
+-@media (max-width:520px){ .logo-text{ font-size:12px;} .page-title{ font-size:18px;} .grid{ grid-template-columns:1fr;} }
+-:focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; }
++:root{--bg:#090b14;--panel:#111827;--panel2:#172033;--text:#f8fafc;--muted:#a5b4c9;--green:#57f287;--blue:#38bdf8;--orange:#fbbf24;--red:#fb7185;--purple:#c084fc;--border:rgba(255,255,255,.13);--shadow:0 22px 60px rgba(0,0,0,.35);--radius:24px;--pixel:'Press Start 2P',cursive;--body:'Inter',sans-serif}
++*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:var(--body);color:var(--text);background:linear-gradient(rgba(9,11,20,.83),rgba(9,11,20,.93)),url('timbul.jpeg') center/360px fixed,radial-gradient(circle at 20% 0%,rgba(87,242,135,.18),transparent 34%),radial-gradient(circle at 90% 12%,rgba(56,189,248,.14),transparent 34%),var(--bg);overflow-x:hidden}.container{width:min(1160px,calc(100% - 32px));margin:0 auto}.site-header{position:sticky;top:0;z-index:10;background:rgba(9,11,20,.76);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}.header-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0}.logo{display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none}.logo-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--blue));color:#061012;box-shadow:0 0 28px rgba(87,242,135,.28)}.logo-text{font-family:var(--pixel);font-size:14px;line-height:1.35}.logo-text span{display:block;color:var(--green);font-size:10px;margin-top:4px}.site-nav{display:flex;align-items:center;gap:10px}.nav-link{color:var(--muted);text-decoration:none;font-weight:800;padding:10px 12px;border-radius:14px}.nav-link:hover{color:var(--text);background:rgba(255,255,255,.07)}main{padding:42px 0 72px}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:stretch;margin-bottom:28px}.hero-card,.panel{background:linear-gradient(180deg,rgba(23,32,51,.92),rgba(17,24,39,.88));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}.hero-card{padding:34px;position:relative;overflow:hidden}.hero-card:after{content:'CREEPER? AWWW MAN';position:absolute;right:-34px;bottom:24px;transform:rotate(-10deg);font-family:var(--pixel);font-size:18px;color:rgba(87,242,135,.09);white-space:nowrap}.eyebrow{display:inline-flex;align-items:center;gap:9px;margin-bottom:18px;padding:9px 13px;border-radius:999px;background:rgba(87,242,135,.12);color:var(--green);font-weight:900;border:1px solid rgba(87,242,135,.22)}.hero h1{font-family:var(--pixel);font-size:clamp(22px,4vw,42px);line-height:1.35;margin:0 0 18px}.hero p{font-size:18px;line-height:1.7;color:var(--muted);max-width:680px;margin:0 0 24px}.hero-actions{display:flex;flex-wrap:wrap;gap:12px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:16px;padding:13px 18px;font-weight:900;font-family:var(--body);cursor:pointer;text-decoration:none;transition:.2s}.btn:hover{transform:translateY(-2px)}.btn-primary{background:linear-gradient(135deg,var(--green),var(--blue));color:#061012}.btn-ghost{background:rgba(255,255,255,.07);color:var(--text);border:1px solid var(--border)}.btn-danger{background:rgba(251,113,133,.12);color:#fecdd3;border:1px solid rgba(251,113,133,.28)}.btn-sm{padding:10px 13px;border-radius:13px;font-size:13px}.btn-block{width:100%}.meme-panel{padding:24px;display:flex;flex-direction:column;gap:14px}.meme-title{font-family:var(--pixel);font-size:14px;line-height:1.5;color:var(--orange)}.joke-box{padding:16px;border-radius:18px;background:rgba(0,0,0,.22);border:1px dashed rgba(251,191,36,.4);color:#fde68a;line-height:1.6;font-weight:800}.quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:14px;border-radius:18px;background:rgba(255,255,255,.06);text-align:center}.stat strong{display:block;font-size:24px;color:var(--green)}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:22px 0}.search-box{flex:1;min-width:240px;display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--border)}.search-box input{width:100%;background:transparent;border:0;outline:0;color:var(--text);font:inherit}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);font-weight:800;cursor:pointer}.chip.active{background:var(--green);color:#061012;border-color:transparent}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}.card{display:flex;flex-direction:column;min-height:100%;overflow:hidden;color:var(--text);text-decoration:none;background:rgba(17,24,39,.88);border:1px solid var(--border);border-radius:22px;box-shadow:0 10px 28px rgba(0,0,0,.22);transition:.22s}.card:hover{transform:translateY(-6px);border-color:rgba(87,242,135,.45)}.card-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#0b1020}.card-body{display:flex;flex-direction:column;gap:11px;padding:18px;flex:1}.card-top{display:flex;justify-content:space-between;gap:10px}.card-title{font-size:19px;line-height:1.25;margin:0}.badge{flex-shrink:0;align-self:flex-start;padding:6px 10px;border-radius:12px;background:rgba(56,189,248,.13);color:#bae6fd;border:1px solid rgba(56,189,248,.25);font-weight:900;font-size:12px}.card-desc,.muted{color:var(--muted);line-height:1.6}.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{padding:5px 9px;border-radius:999px;background:rgba(192,132,252,.13);color:#e9d5ff;border:1px solid rgba(192,132,252,.22);font-size:12px;font-weight:800}.card-meta{margin-top:auto;display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.detail{display:grid;grid-template-columns:1fr 1fr;gap:24px}.detail-img{width:100%;border-radius:24px;border:1px solid var(--border);aspect-ratio:16/10;object-fit:cover}.panel{padding:24px}.page-title{font-family:var(--pixel);font-size:20px;line-height:1.5;margin:0 0 12px}.file-row{display:flex;align-items:center;gap:14px;padding:14px;margin-top:12px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.05)}.file-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(87,242,135,.12);color:var(--green)}.file-info{flex:1;min-width:0}.file-name{font-weight:900;word-break:break-word}.admin-login{max-width:440px;margin:40px auto}.field{margin-bottom:15px}.field label{display:block;margin-bottom:7px;color:var(--muted);font-weight:800}.field input,.field textarea{width:100%;padding:13px 14px;border-radius:15px;border:1px solid var(--border);background:rgba(0,0,0,.2);color:var(--text);font:inherit;outline:0}.field textarea{min-height:110px;resize:vertical}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.file-upload-row{display:grid;grid-template-columns:1fr 110px 1fr auto;gap:8px;margin-bottom:8px}.admin-list-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--border);border-radius:16px;margin-bottom:10px;background:rgba(255,255,255,.04)}.row-actions{display:flex;gap:8px}.empty{padding:46px 18px;text-align:center;color:var(--muted);background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:22px}.toast{position:fixed;right:22px;bottom:22px;z-index:20;padding:14px 18px;border-radius:16px;background:#0f172a;border:1px solid var(--border);box-shadow:var(--shadow)}footer{padding:28px 0;border-top:1px solid var(--border);color:var(--muted);text-align:center}@media(max-width:820px){.hero,.detail,.admin-grid{grid-template-columns:1fr}.file-upload-row{grid-template-columns:1fr}.quick-stats{grid-template-columns:1fr 1fr 1fr}.site-nav .hide-sm{display:none}}@media(max-width:520px){.container{width:min(100% - 22px,1160px)}.hero-card,.panel,.meme-panel{padding:18px}.file-row{align-items:flex-start;flex-direction:column}.quick-stats{grid-template-columns:1fr}.logo-text{font-size:11px}}
+ </style>
+ </head>
+ <body>
+-
+-<div class="bg-glow bg-glow--pink"></div>
+-<div class="bg-glow bg-glow--cyan"></div>
+-
+-<header class="site-header">
+-  <div class="container header-inner">
+-    <a href="#/" class="logo">
+-      <i class="fa-solid fa-cube logo-icon"></i>
+-      <span class="logo-text">CRAFT<span class="accent">HUB</span></span>
+-      <span class="logo-sub">✦ для своих</span>
+-    </a>
+-    <nav class="site-nav">
+-      <a href="#/" class="nav-link">Сборки</a>
+-      <a href="#/admin" class="nav-link nav-admin" title="Панель управления"><i class="fa-solid fa-lock"></i></a>
+-    </nav>
+-  </div>
+-</header>
+-
+-<main id="app" class="container fade-in"></main>
+-
+-<footer class="site-footer">
+-  <div class="container">💜 Сделано для наших — качайте, играйте, делитесь</div>
+-</footer>
+-
++<header class="site-header"><div class="container header-inner"><a class="logo" href="#/"><span class="logo-mark"><i class="fa-solid fa-cubes"></i></span><span class="logo-text">СБОРКИ<span>для друзей</span></span></a><nav class="site-nav"><a class="nav-link hide-sm" href="#packs">Модпаки</a><a class="nav-link hide-sm" href="#rules">Правила</a><a class="nav-link" href="#/admin"><i class="fa-solid fa-key"></i> Админка</a></nav></div></header>
++<main id="app" class="container"></main>
++<footer><div class="container">Сайт для своих: если крашнулось — виноват не я, это звёзды в чанках не сошлись 🧊</div></footer>
+ <script>
+-/* ================= ДАННЫЕ ================= */
+-const LS_BUILDS='mcb_builds_v1', LS_PASS='mcb_admin_pass_v1', SS_AUTH='mcb_admin_auth', DEFAULT_PASSWORD='admin123';
+-
+-const SEED_BUILDS=[
+- {id:'seed_1',title:'SkyBlock Reforged',version:'1.20.1',
+-  shortDesc:'Атмосферная скайблок-сборка с магией и технологиями.',
+-  fullDesc:'SkyBlock Reforged — сборка на 90+ модов: технологии (Applied Energistics, Mekanism), магия (Ars Nouveau) и продуманная система квестов. Оптимизирована под слабые ПК.',
+-  image:'https://placehold.co/800x450/1a0533/FF2D95?text=SkyBlock+Reforged',
+-  tags:['skyblock','техно','магия'], date:'2026-06-12',
+-  files:[
+-   {id:'f1',name:'SkyBlockReforged-v3.2.mrpack',url:'files/skyblock-reforged-v3.2.mrpack',size:52428800,downloads:0},
+-   {id:'f2',name:'server-pack.zip',url:'files/skyblock-reforged-server.zip',size:47185920,downloads:0}
+-  ]},
+- {id:'seed_2',title:'Horror Nights',version:'1.19.2',
+-  shortDesc:'Хоррор-приключение с новыми мобами и напряжённой атмосферой.',
+-  fullDesc:'Horror Nights добавляет новых мобов, звуковой дизайн и систему рассудка. Подходит для одиночного прохождения или кооператива до 4 игроков.',
+-  image:'https://placehold.co/800x450/0a0a1a/00D4FF?text=Horror+Nights',
+-  tags:['хоррор','сюжет','кооп'], date:'2026-05-28',
+-  files:[{id:'f3',name:'HorrorNights-1.4.zip',url:'files/horror-nights-1.4.zip',size:31457280,downloads:0}]}
+-];
+-
+-function escapeHtml(s){ if(s===undefined||s===null) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
+-function formatBytes(b){ if(!b) return '—'; const u=['Б','КБ','МБ','ГБ']; let i=0,v=b; while(v>=1024&&i<u.length-1){v/=1024;i++;} return `${v.toFixed(v<10&&i>0?1:0)} ${u[i]}`; }
+-function formatDate(iso){ try{ return new Date(iso).toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'}); }catch(e){ return iso; } }
+-function genId(p='b'){ return `${p}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`; }
+-
+-function initData(){ if(!localStorage.getItem(LS_BUILDS)) saveBuilds(SEED_BUILDS); }
+-function loadBuilds(){ try{ return JSON.parse(localStorage.getItem(LS_BUILDS))||[]; }catch(e){ return []; } }
+-function saveBuilds(b){ localStorage.setItem(LS_BUILDS, JSON.stringify(b)); }
+-function getBuild(id){ return loadBuilds().find(b=>b.id===id)||null; }
+-function upsertBuild(build){ const b=loadBuilds(); const i=b.findIndex(x=>x.id===build.id); if(i>=0) b[i]=build; else b.unshift(build); saveBuilds(b); }
+-function deleteBuild(id){ saveBuilds(loadBuilds().filter(b=>b.id!==id)); }
+-function incrementDownload(bid,fid){ const b=loadBuilds(); const build=b.find(x=>x.id===bid); if(!build) return; const f=build.files.find(x=>x.id===fid); if(!f) return; f.downloads=(f.downloads||0)+1; saveBuilds(b); }
+-function getAllTags(){ const s=new Set(); loadBuilds().forEach(b=>(b.tags||[]).forEach(t=>s.add(t))); return [...s]; }
+-function checkPassword(p){ return p===(localStorage.getItem(LS_PASS)||DEFAULT_PASSWORD); }
+-function setPassword(p){ localStorage.setItem(LS_PASS,p); }
+-function isAdminAuthed(){ return sessionStorage.getItem(SS_AUTH)==='true'; }
+-function setAdminAuthed(v){ if(v) sessionStorage.setItem(SS_AUTH,'true'); else sessionStorage.removeItem(SS_AUTH); }
+-function fileIcon(name){ const ext=(name.split('.').pop()||'').toLowerCase(); return {zip:'fa-file-zipper',mrpack:'fa-box-archive',jar:'fa-mug-hot',json:'fa-file-code'}[ext]||'fa-file-arrow-down'; }
+-function exportBuildsJson(){ const data=JSON.stringify(loadBuilds(),null,2); const blob=new Blob([data],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='builds.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+-
+-/* ================= РОУТИНГ ================= */
+-const app=document.getElementById('app');
+-function navigate(){
+-  app.classList.remove('fade-in'); void app.offsetWidth; app.classList.add('fade-in');
+-  const hash=location.hash||'#/';
+-  if(hash==='#/'){ renderHome(); }
+-  else if(hash.startsWith('#/build/')){ renderBuildDetail(decodeURIComponent(hash.split('/')[2])); }
+-  else if(hash==='#/admin'){ renderAdmin(); }
+-  else{ renderHome(); }
+-  window.scrollTo({top:0,behavior:'smooth'});
+-}
+-window.addEventListener('hashchange', navigate);
+-window.addEventListener('DOMContentLoaded', ()=>{ initData(); navigate(); });
+-
+-function toast(msg,type='ok'){ const el=document.createElement('div'); el.className=`toast ${type}`; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2600); }
+-
+-/* ================= ГЛАВНАЯ ================= */
+-let activeTag=null, searchQuery='';
+-function renderHome(){
+-  const tags=getAllTags();
+-  app.innerHTML=`
+-    <div class="friend-tag"><i class="fa-solid fa-users"></i> только для наших</div>
+-    <h1 class="page-title">Сборки Minecraft</h1>
+-    <p class="page-sub">Скачивай модпаки для себя и друзей — всё бесплатно и без регистрации</p>
+-    <div class="toolbar">
+-      <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i>
+-        <input type="text" id="searchInput" placeholder="Поиск по названию или тегу..." value="${escapeHtml(searchQuery)}">
+-      </div>
+-      <div class="tag-filter" id="tagFilter">
+-        <div class="tag-chip ${activeTag===null?'active':''}" data-tag="">Все</div>
+-        ${tags.map(t=>`<div class="tag-chip ${activeTag===t?'active':''}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</div>`).join('')}
+-      </div>
+-    </div>
+-    <div id="grid" class="grid"></div>`;
+-  document.getElementById('searchInput').addEventListener('input', e=>{ searchQuery=e.target.value; renderGrid(); });
+-  document.querySelectorAll('.tag-chip').forEach(chip=>chip.addEventListener('click', ()=>{ activeTag=chip.dataset.tag||null; renderHome(); }));
+-  renderGrid();
+-}
+-function renderGrid(){
+-  const grid=document.getElementById('grid'); if(!grid) return;
+-  let builds=loadBuilds();
+-  if(activeTag) builds=builds.filter(b=>(b.tags||[]).includes(activeTag));
+-  if(searchQuery.trim()){ const q=searchQuery.trim().toLowerCase(); builds=builds.filter(b=>b.title.toLowerCase().includes(q)||(b.tags||[]).some(t=>t.toLowerCase().includes(q))); }
+-  if(!builds.length){ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-box-open"></i><p>Сборок нет — добавь первую!</p></div>`; return; }
+-  grid.innerHTML=builds.map((b,i)=>`
+-    <a href="#/build/${encodeURIComponent(b.id)}" class="card" style="animation-delay:${i*0.05}s">
+-      <img class="card-img" src="${escapeHtml(b.image)}" alt="${escapeHtml(b.title)}" loading="lazy" onerror="this.src='https://placehold.co/800x450/1a0533/FFD700?text=No+Image'">
+-      <div class="card-body">
+-        <div class="card-top"><h3 class="card-title">${escapeHtml(b.title)}</h3><span class="version-badge">${escapeHtml(b.version)}</span></div>
+-        <p class="card-desc">${escapeHtml(b.shortDesc)}</p>
+-        <div class="card-tags">${(b.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+-        <div class="card-meta"><span><i class="fa-regular fa-calendar"></i> ${formatDate(b.date)}</span><span><i class="fa-solid fa-download"></i> ${(b.files||[]).reduce((s,f)=>s+(f.downloads||0),0)}</span></div>
+-      </div>
+-    </a>`).join('');
+-}
+-
+-/* ================= СТРАНИЦА СБОРКИ ================= */
+-function renderBuildDetail(id){
+-  const b=getBuild(id);
+-  if(!b){ app.innerHTML=`<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Сборка не найдена.</p><a href="#/" class="btn btn-outline" style="margin-top:14px;">На главную</a></div>`; return; }
+-  app.innerHTML=`
+-    <a href="#/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Все сборки</a>
+-    <div class="detail-hero">
+-      <img class="detail-img" src="${escapeHtml(b.image)}" alt="${escapeHtml(b.title)}" onerror="this.src='https://placehold.co/800x450/1a0533/FFD700?text=No+Image'">
+-      <div class="detail-info">
+-        <span class="version-badge">Minecraft ${escapeHtml(b.version)}</span>
+-        <h1>${escapeHtml(b.title)}</h1>
+-        <p class="detail-desc">${escapeHtml(b.fullDesc)}</p>
+-        <div class="detail-tags">${(b.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+-        <div class="detail-date"><i class="fa-regular fa-calendar"></i> Добавлено ${formatDate(b.date)}</div>
+-      </div>
+-    </div>
+-    <div class="files-section"><h2 class="section-heading">📦 Файлы для скачивания</h2><div id="fileList"></div></div>`;
+-  renderFileList(b);
+-}
+-function renderFileList(b){
+-  const wrap=document.getElementById('fileList');
+-  if(!b.files||!b.files.length){ wrap.innerHTML=`<p class="page-sub">Файлов пока нет — скоро добавлю 😉</p>`; return; }
+-  wrap.innerHTML=b.files.map(f=>`
+-    <div class="file-row">
+-      <div class="file-icon"><i class="fa-solid ${fileIcon(f.name)}"></i></div>
+-      <div class="file-info"><div class="file-name">${escapeHtml(f.name)}</div><div class="file-sub">${formatBytes(f.size)} · скачано ${f.downloads||0} раз</div></div>
+-      <button class="btn btn-primary btn-sm" data-file="${f.id}"><i class="fa-solid fa-download"></i> Скачать</button>
+-    </div>`).join('');
+-  wrap.querySelectorAll('button[data-file]').forEach(btn=>btn.addEventListener('click', ()=>downloadFile(b.id, btn.dataset.file)));
+-}
+-function downloadFile(bid,fid){
+-  const b=getBuild(bid); const f=b.files.find(x=>x.id===fid); if(!f) return;
+-  const a=document.createElement('a'); a.href=f.data||f.url; a.download=f.name; document.body.appendChild(a); a.click(); a.remove();
+-  incrementDownload(bid,fid); renderFileList(getBuild(bid));
+-}
+-
+-/* ================= АДМИН ================= */
+-function renderAdmin(){ isAdminAuthed()?renderAdminDashboard():renderAdminLogin(); }
+-function renderAdminLogin(){
+-  app.innerHTML=`
+-    <div class="admin-login">
+-      <i class="fa-solid fa-user-shield"></i>
+-      <h2 class="page-title" style="font-size:18px;">Вход для своих</h2>
+-      <p class="page-sub" style="margin-bottom:16px;">Спроси пароль у того, кто создал сайт 😉</p>
+-      <div class="field" style="margin-top:16px;"><label>Пароль</label><input type="password" id="adminPass" placeholder="••••••••"></div>
+-      <button class="btn btn-primary btn-block btn-lg" id="loginBtn">Войти</button>
+-      <div class="error-msg" id="loginError"></div>
+-      <p class="footer-note">Пароль по умолчанию: <b>admin123</b> — смени его сразу!</p>
+-    </div>`;
+-  const tryLogin=()=>{ const pass=document.getElementById('adminPass').value; if(checkPassword(pass)){ setAdminAuthed(true); renderAdmin(); } else { document.getElementById('loginError').textContent='Неверный пароль, братан 😅'; } };
+-  document.getElementById('loginBtn').addEventListener('click', tryLogin);
+-  document.getElementById('adminPass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryLogin(); });
+-}
+-let editingId=null, draftFiles=[];
+-function renderAdminDashboard(){
+-  const builds=loadBuilds();
+-  app.innerHTML=`
+-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+-      <div><h1 class="page-title">👑 Для админа</h1><p class="page-sub" style="margin-bottom:0;">Добавляй сборки, чтобы друзья качали</p></div>
+-      <div style="display:flex; gap:10px;">
+-        <button class="btn btn-gold" id="exportBtn"><i class="fa-solid fa-file-export"></i> Бэкап</button>
+-        <button class="btn btn-outline" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button>
+-      </div>
+-    </div>
+-    <div class="admin-panel">
+-      <div class="admin-card">
+-        <h3 class="section-heading">${editingId?'✏️ Редактируем':'✨ Новая сборка'}</h3>
+-        <form id="buildForm">
+-          <div class="field"><label>Название</label><input required id="f_title" placeholder="Например, SkyBlock Reforged"></div>
+-          <div class="field"><label>Версия Minecraft</label><input required id="f_version" placeholder="1.20.1"></div>
+-          <div class="field"><label>Краткое описание</label><input required id="f_short" placeholder="Одна строка для карточки"></div>
+-          <div class="field"><label>Полное описание</label><textarea required id="f_full" placeholder="Подробности сборки..."></textarea></div>
+-          <div class="field"><label>Ссылка на превью-изображение</label><input required id="f_image" placeholder="https://... (можно imgur.com)"></div>
+-          <div class="field"><label>Теги (через запятую)</label><input id="f_tags" placeholder="техно, магия, хоррор"></div>
+-          <div class="field">
+-            <label>Файлы (.zip, .mrpack, .jar, .json)</label>
+-            <div id="fileRows"></div>
+-            <button type="button" class="btn btn-outline btn-sm" id="addFileRow"><i class="fa-solid fa-plus"></i> Добавить файл</button>
+-            <p class="footer-note">📁 Загружай файлы через кнопку «Файл» (до 5 МБ в сумме). Для больших модпаков положи файл в папку <b>/files</b> репозитория и укажи ссылку вида <b>files/имя.zip</b></p>
+-          </div>
+-          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:10px;"><i class="fa-solid fa-rocket"></i> ${editingId?'Сохранить':'Опубликовать'}</button>
+-          ${editingId?'<button type="button" id="cancelEdit" class="btn btn-outline btn-block" style="margin-top:10px;">Отменить</button>':''}
+-        </form>
+-      </div>
+-      <div class="admin-card">
+-        <h3 class="section-heading">📋 Все сборки (${builds.length})</h3>
+-        <div id="adminList">
+-          ${builds.length?builds.map(b=>`
+-            <div class="admin-list-item">
+-              <div><div class="title">${escapeHtml(b.title)}</div><div class="sub">${escapeHtml(b.version)} · ${(b.files||[]).length} файл(ов)</div></div>
+-              <div class="row-actions">
+-                <button class="btn btn-outline btn-sm" data-edit="${b.id}"><i class="fa-solid fa-pen"></i></button>
+-                <button class="btn btn-danger btn-sm" data-del="${b.id}"><i class="fa-solid fa-trash"></i></button>
+-              </div>
+-            </div>`).join(''):'<p class="page-sub">Пока пусто. Добавь первую сборку!</p>'}
+-        </div>
+-        <h3 class="section-heading" style="margin-top:28px;">🔑 Настройки</h3>
+-        <div class="field"><label>Новый пароль (для входа в админку)</label><input type="password" id="newPass" placeholder="Придумай новый пароль"></div>
+-        <button class="btn btn-outline btn-block" id="savePassBtn">Сменить пароль</button>
+-        <p class="footer-note" style="margin-top:12px;">⚠️ Не потеряй пароль! Если забудешь — придётся чистить localStorage в браузере.</p>
+-      </div>
+-    </div>`;
+-  draftFiles=editingId?[...getBuild(editingId).files]:[];
+-  renderFileRows();
+-  if(editingId){
+-    const b=getBuild(editingId);
+-    document.getElementById('f_title').value=b.title;
+-    document.getElementById('f_version').value=b.version;
+-    document.getElementById('f_short').value=b.shortDesc;
+-    document.getElementById('f_full').value=b.fullDesc;
+-    document.getElementById('f_image').value=b.image;
+-    document.getElementById('f_tags').value=(b.tags||[]).join(', ');
+-  }
+-  document.getElementById('addFileRow').addEventListener('click', ()=>{ draftFiles.push({id:genId('f'),name:'',url:'',data:null,size:0,downloads:0}); renderFileRows(); });
+-  document.getElementById('buildForm').addEventListener('submit', onSubmitBuild);
+-  document.getElementById('exportBtn').addEventListener('click', ()=>{ exportBuildsJson(); toast('Бэкап скачан ✅'); });
+-  document.getElementById('logoutBtn').addEventListener('click', ()=>{ setAdminAuthed(false); location.hash='#/'; });
+-  document.getElementById('savePassBtn').addEventListener('click', ()=>{ const val=document.getElementById('newPass').value.trim(); if(val.length<4){ toast('Пароль слишком короткий, сделай 4+ символов','err'); return; } setPassword(val); toast('Пароль обновлён 🔒'); document.getElementById('newPass').value=''; });
+-  document.querySelectorAll('[data-edit]').forEach(btn=>btn.addEventListener('click', ()=>{ editingId=btn.dataset.edit; renderAdminDashboard(); window.scrollTo({top:0,behavior:'smooth'}); }));
+-  document.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click', ()=>{ if(confirm('Точно удалить? Без возврата!')){ deleteBuild(btn.dataset.del); if(editingId===btn.dataset.del) editingId=null; toast('Сборка удалена'); renderAdminDashboard(); } }));
+-  const cancelBtn=document.getElementById('cancelEdit'); if(cancelBtn) cancelBtn.addEventListener('click', ()=>{ editingId=null; renderAdminDashboard(); });
+-}
+-function renderFileRows(){
+-  const wrap=document.getElementById('fileRows'); if(!wrap) return;
+-  if(!draftFiles.length){ wrap.innerHTML='<p class="footer-note" style="margin:6px 0 12px;">Файлов пока нет. Добавь!</p>'; return; }
+-  wrap.innerHTML=draftFiles.map((f,i)=>`
+-    <div class="file-upload-row">
+-      <input placeholder="Имя файла" value="${escapeHtml(f.name)}" data-idx="${i}" class="fr-name">
+-      <input type="file" data-idx="${i}" class="fr-file" accept=".zip,.mrpack,.jar,.json">
+-      <input placeholder="или ссылка: files/имя.zip" value="${escapeHtml(f.url||'')}" data-idx="${i}" class="fr-url">
+-      <button type="button" class="btn btn-danger btn-sm" data-idx="${i}" title="Удалить"><i class="fa-solid fa-xmark"></i></button>
+-    </div>`).join('');
+-  wrap.querySelectorAll('.fr-name').forEach(inp=>inp.addEventListener('input', e=>{ draftFiles[+e.target.dataset.idx].name=e.target.value; }));
+-  wrap.querySelectorAll('.fr-url').forEach(inp=>inp.addEventListener('input', e=>{ draftFiles[+e.target.dataset.idx].url=e.target.value; draftFiles[+e.target.dataset.idx].data=null; }));
+-  wrap.querySelectorAll('.fr-file').forEach(inp=>inp.addEventListener('change', e=>{
+-    const idx=+e.target.dataset.idx; const file=e.target.files[0]; if(!file) return;
+-    const reader=new FileReader();
+-    reader.onload=()=>{ draftFiles[idx].data=reader.result; draftFiles[idx].size=file.size; draftFiles[idx].url=''; if(!draftFiles[idx].name) draftFiles[idx].name=file.name; renderFileRows(); toast(`Файл «${file.name}» загружен (${formatBytes(file.size)})`); };
+-    reader.onerror=()=>toast('Не удалось прочитать файл','err');
+-    reader.readAsDataURL(file);
+-  }));
+-  wrap.querySelectorAll('button[data-idx]').forEach(btn=>btn.addEventListener('click', e=>{ draftFiles.splice(+e.currentTarget.dataset.idx,1); renderFileRows(); }));
+-}
+-function onSubmitBuild(e){
+-  e.preventDefault();
+-  const files=draftFiles.filter(f=>f.name&&(f.url||f.data)).map(f=>({...f,downloads:f.downloads||0}));
+-  const build={
+-    id:editingId||genId('b'),
+-    title:document.getElementById('f_title').value.trim(),
+-    version:document.getElementById('f_version').value.trim(),
+-    shortDesc:document.getElementById('f_short').value.trim(),
+-    fullDesc:document.getElementById('f_full').value.trim(),
+-    image:document.getElementById('f_image').value.trim(),
+-    tags:document.getElementById('f_tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+-    date:editingId?getBuild(editingId).date:new Date().toISOString().slice(0,10),
+-    files
+-  };
+-  upsertBuild(build);
+-  toast(editingId?'✅ Изменения сохранены':'✅ Сборка опубликована! Друзья увидят');
+-  editingId=null;
+-  renderAdminDashboard();
+-}
++const LS_BUILDS='mcb_builds_v2',LS_PASS='mcb_admin_pass_v2',SS_AUTH='mcb_admin_auth_v2',DEFAULT_PASSWORD='admin123';
++const FRIEND_JOKES=['не спрашиваем «а OptiFine будет?» — просто верим','если FPS ниже 30, говорим что это кинематографично','крипер — это будильник, но зелёный','зашёл на пять минут, вышел в 4 утра','вещи в лаве не пропали, они переехали'];
++const SEED_BUILDS=[{id:'seed_1',title:'ПельменьCraft: уютный хаос',version:'1.20.1',shortDesc:'Ваниль+, квесты, декор и минимум душнины. Для вечернего «ну одну шахту и спать».',fullDesc:'Лёгкая сборка для друзей: карта грузится быстро, интерфейс понятный, квесты ведут за ручку, а декора хватит, чтобы построить базу мечты и случайно забыть про сон.',image:'https://placehold.co/900x506/172033/57f287?text=PelmenCraft',tags:['ваниль+','уют','квесты'],date:'2026-07-22',files:[{id:'f1',name:'PelmenCraft-1.0.mrpack',url:'files/pelmencraft-1.0.mrpack',size:52428800,downloads:0}]},{id:'seed_2',title:'Шахта, брат, копай',version:'1.19.2',shortDesc:'Техно-сборка для тех, кто любит трубы, механизмы и фразу «сейчас всё заработает».',fullDesc:'Технологии, хранение, автоматизация и понятный старт. Подойдёт, если хочется построить завод, который занимает три чанка и уважительно гудит по ночам.',image:'https://placehold.co/900x506/0f172a/38bdf8?text=Shahta+Brat+Kopay',tags:['техно','автоматизация','кооп'],date:'2026-07-18',files:[{id:'f2',name:'ShahtaBratKopay.zip',url:'files/shahta-brat-kopay.zip',size:73400320,downloads:0}]}];
++function escapeHtml(s){return String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}function formatBytes(b){if(!b)return'—';const u=['Б','КБ','МБ','ГБ'];let i=0,v=b;while(v>=1024&&i<u.length-1){v/=1024;i++}return`${v.toFixed(v<10&&i>0?1:0)} ${u[i]}`}function formatDate(iso){return new Date(iso).toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'})}function genId(p='b'){return`${p}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`}function initData(){if(!localStorage.getItem(LS_BUILDS))saveBuilds(SEED_BUILDS)}function loadBuilds(){try{return JSON.parse(localStorage.getItem(LS_BUILDS))||[]}catch(e){return[]}}function saveBuilds(b){localStorage.setItem(LS_BUILDS,JSON.stringify(b))}function getBuild(id){return loadBuilds().find(b=>b.id===id)||null}function upsertBuild(build){const b=loadBuilds(),i=b.findIndex(x=>x.id===build.id);i>=0?b[i]=build:b.unshift(build);saveBuilds(b)}function deleteBuild(id){saveBuilds(loadBuilds().filter(b=>b.id!==id))}function incrementDownload(bid,fid){const b=loadBuilds(),build=b.find(x=>x.id===bid);if(!build)return;const f=build.files.find(x=>x.id===fid);if(!f)return;f.downloads=(f.downloads||0)+1;saveBuilds(b)}function getAllTags(){const s=new Set();loadBuilds().forEach(b=>(b.tags||[]).forEach(t=>s.add(t)));return[...s]}function checkPassword(p){return p===(localStorage.getItem(LS_PASS)||DEFAULT_PASSWORD)}function setPassword(p){localStorage.setItem(LS_PASS,p)}function isAdminAuthed(){return sessionStorage.getItem(SS_AUTH)==='true'}function setAdminAuthed(v){v?sessionStorage.setItem(SS_AUTH,'true'):sessionStorage.removeItem(SS_AUTH)}function fileIcon(name){const ext=(name.split('.').pop()||'').toLowerCase();return{zip:'fa-file-zipper',mrpack:'fa-box-archive',jar:'fa-mug-hot',json:'fa-file-code'}[ext]||'fa-file-arrow-down'}function toast(msg){const el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),2600)}
++const app=document.getElementById('app');let activeTag=null,searchQuery='',editingId=null,draftFiles=[];window.addEventListener('hashchange',navigate);window.addEventListener('DOMContentLoaded',()=>{initData();navigate()});function navigate(){const hash=location.hash||'#/';if(hash==='#/')renderHome();else if(hash.startsWith('#/build/'))renderBuildDetail(decodeURIComponent(hash.split('/')[2]));else if(hash==='#/admin')renderAdmin();else renderHome();window.scrollTo({top:0,behavior:'smooth'})}
++function renderHome(){const builds=loadBuilds(),downloads=builds.reduce((s,b)=>s+(b.files||[]).reduce((a,f)=>a+(f.downloads||0),0),0),joke=FRIEND_JOKES[new Date().getDate()%FRIEND_JOKES.length],tags=getAllTags();app.innerHTML=`<section class="hero"><div class="hero-card"><div class="eyebrow"><i class="fa-solid fa-user-group"></i> приватный сундук модпаков</div><h1>Сборки Minecraft для тебя и друзей</h1><p>Заливай модпаки, кидай ссылку в чат и не объясняй каждому по десять раз, куда нажимать. Интерфейс простой: выбрал сборку → скачал → пошёл спорить, где ставить дом.</p><div class="hero-actions"><a class="btn btn-primary" href="#packs"><i class="fa-solid fa-download"></i> Выбрать сборку</a><a class="btn btn-ghost" href="#/admin"><i class="fa-solid fa-plus"></i> Залить новую</a></div></div><aside class="panel meme-panel" id="rules"><div class="meme-title">локальное правило дня</div><div class="joke-box">${escapeHtml(joke)}</div><div class="quick-stats"><div class="stat"><strong>${builds.length}</strong>сборки</div><div class="stat"><strong>${downloads}</strong>скачиваний</div><div class="stat"><strong>${tags.length}</strong>тегов</div></div><p class="muted">Подстрой шутки под ваш чат в массиве <b>FRIEND_JOKES</b> — мемная панель сама покажет новую.</p></aside></section><section id="packs"><div class="toolbar"><div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="searchInput" placeholder="ищем модпак, тег или смысл жизни..." value="${escapeHtml(searchQuery)}"></div><div class="chips"><button class="chip ${activeTag===null?'active':''}" data-tag="">Все</button>${tags.map(t=>`<button class="chip ${activeTag===t?'active':''}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join('')}</div></div><div id="grid" class="grid"></div></section>`;document.getElementById('searchInput').addEventListener('input',e=>{searchQuery=e.target.value;renderGrid()});document.querySelectorAll('.chip').forEach(chip=>chip.addEventListener('click',()=>{activeTag=chip.dataset.tag||null;renderHome()}));renderGrid()}
++function renderGrid(){const grid=document.getElementById('grid');let builds=loadBuilds();if(activeTag)builds=builds.filter(b=>(b.tags||[]).includes(activeTag));if(searchQuery.trim()){const q=searchQuery.trim().toLowerCase();builds=builds.filter(b=>b.title.toLowerCase().includes(q)||b.shortDesc.toLowerCase().includes(q)||(b.tags||[]).some(t=>t.toLowerCase().includes(q)))}if(!builds.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-box-open"></i><p>Пусто. Либо сборок нет, либо поиск ушёл в Незер.</p></div>';return}grid.innerHTML=builds.map(b=>`<a href="#/build/${encodeURIComponent(b.id)}" class="card"><img class="card-img" src="${escapeHtml(b.image)}" alt="${escapeHtml(b.title)}" loading="lazy" onerror="this.src='https://placehold.co/900x506/172033/fbbf24?text=preview+poteryalsya'"><div class="card-body"><div class="card-top"><h3 class="card-title">${escapeHtml(b.title)}</h3><span class="badge">${escapeHtml(b.version)}</span></div><p class="card-desc">${escapeHtml(b.shortDesc)}</p><div class="tags">${(b.tags||[]).map(t=>`<span class="tag">#${escapeHtml(t)}</span>`).join('')}</div><div class="card-meta"><span><i class="fa-regular fa-calendar"></i> ${formatDate(b.date)}</span><span><i class="fa-solid fa-download"></i> ${(b.files||[]).reduce((s,f)=>s+(f.downloads||0),0)}</span></div></div></a>`).join('')}
++function renderBuildDetail(id){const b=getBuild(id);if(!b){app.innerHTML='<div class="empty"><p>Сборка потерялась между чанками.</p><a class="btn btn-ghost" href="#/">На главную</a></div>';return}app.innerHTML=`<a class="btn btn-ghost btn-sm" href="#/"><i class="fa-solid fa-arrow-left"></i> назад к сборкам</a><div class="detail" style="margin-top:18px"><img class="detail-img" src="${escapeHtml(b.image)}" alt="${escapeHtml(b.title)}"><div class="panel"><span class="badge">Minecraft ${escapeHtml(b.version)}</span><h1 class="page-title" style="margin-top:14px">${escapeHtml(b.title)}</h1><p class="muted">${escapeHtml(b.fullDesc)}</p><div class="tags">${(b.tags||[]).map(t=>`<span class="tag">#${escapeHtml(t)}</span>`).join('')}</div><p class="muted"><i class="fa-regular fa-calendar"></i> Добавлено ${formatDate(b.date)}</p></div></div><section class="panel" style="margin-top:18px"><h2 class="page-title">📦 Файлы</h2><div id="fileList"></div></section>`;renderFileList(b)}function renderFileList(b){const wrap=document.getElementById('fileList');if(!b.files||!b.files.length){wrap.innerHTML='<p class="muted">Файлов пока нет. Автор ушёл за булыжником.</p>';return}wrap.innerHTML=b.files.map(f=>`<div class="file-row"><div class="file-icon"><i class="fa-solid ${fileIcon(f.name)}"></i></div><div class="file-info"><div class="file-name">${escapeHtml(f.name)}</div><div class="muted">${formatBytes(f.size)} · скачано ${f.downloads||0} раз</div></div><button class="btn btn-primary btn-sm" data-file="${f.id}"><i class="fa-solid fa-download"></i> Скачать</button></div>`).join('');wrap.querySelectorAll('[data-file]').forEach(btn=>btn.addEventListener('click',()=>downloadFile(b.id,btn.dataset.file)))}function downloadFile(bid,fid){const b=getBuild(bid),f=b?.files.find(x=>x.id===fid);if(!f)return;const a=document.createElement('a');a.href=f.data||f.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();incrementDownload(bid,fid);renderFileList(getBuild(bid))}
++function renderAdmin(){isAdminAuthed()?renderAdminDashboard():renderAdminLogin()}function renderAdminLogin(){app.innerHTML=`<div class="panel admin-login"><h1 class="page-title">🔐 Вход для своих</h1><p class="muted">Пароль по умолчанию: <b>admin123</b>. Потом поменяй, а то зайдёт крипер.</p><div class="field"><label>Пароль</label><input type="password" id="adminPass" placeholder="секретный мем"></div><button class="btn btn-primary btn-block" id="loginBtn">Войти</button><p id="loginError" style="color:#fecdd3"></p></div>`;const tryLogin=()=>{if(checkPassword(document.getElementById('adminPass').value)){setAdminAuthed(true);renderAdmin()}else document.getElementById('loginError').textContent='Пароль не тот. Минус сердечко.'};document.getElementById('loginBtn').addEventListener('click',tryLogin);document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin()})}
++function renderAdminDashboard(){const builds=loadBuilds();app.innerHTML=`<div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px"><div><h1 class="page-title">👑 Панель заливщика</h1><p class="muted">Добавляй сборки, файлы и свои локальные мемы.</p></div><button class="btn btn-ghost" id="logoutBtn">Выйти</button></div><div class="admin-grid"><div class="panel"><h2 class="page-title">${editingId?'✏️ Редактируем':'✨ Новая сборка'}</h2><form id="buildForm"><div class="field"><label>Название</label><input required id="f_title" placeholder="Например, ПельменьCraft"></div><div class="field"><label>Версия Minecraft</label><input required id="f_version" placeholder="1.20.1"></div><div class="field"><label>Краткое описание</label><input required id="f_short" placeholder="Одна смешная и понятная строка"></div><div class="field"><label>Полное описание</label><textarea required id="f_full" placeholder="Что внутри, для кого, почему не должно взорваться"></textarea></div><div class="field"><label>Картинка превью</label><input required id="f_image" placeholder="https://... или timbul.jpeg"></div><div class="field"><label>Теги через запятую</label><input id="f_tags" placeholder="техно, уют, хоррор"></div><div class="field"><label>Файлы</label><div id="fileRows"></div><button type="button" class="btn btn-ghost btn-sm" id="addFileRow"><i class="fa-solid fa-plus"></i> Добавить файл</button><p class="muted">Маленький файл можно выбрать кнопкой. Большой модпак положи в папку <b>files</b> и впиши ссылку вида <b>files/name.zip</b>.</p></div><button class="btn btn-primary btn-block" type="submit">${editingId?'Сохранить':'Опубликовать'}</button>${editingId?'<button type="button" class="btn btn-ghost btn-block" id="cancelEdit" style="margin-top:10px">Отменить</button>':''}</form></div><div class="panel"><h2 class="page-title">📋 Все сборки (${builds.length})</h2>${builds.length?builds.map(b=>`<div class="admin-list-item"><div><b>${escapeHtml(b.title)}</b><div class="muted">${escapeHtml(b.version)} · ${(b.files||[]).length} файл(ов)</div></div><div class="row-actions"><button class="btn btn-ghost btn-sm" data-edit="${b.id}"><i class="fa-solid fa-pen"></i></button><button class="btn btn-danger btn-sm" data-del="${b.id}"><i class="fa-solid fa-trash"></i></button></div></div>`).join(''):'<p class="muted">Пока пусто.</p>'}<h2 class="page-title" style="margin-top:24px">🔑 Пароль</h2><div class="field"><label>Новый пароль</label><input type="password" id="newPass" placeholder="4+ символа"></div><button class="btn btn-ghost btn-block" id="savePassBtn">Сменить пароль</button></div></div>`;draftFiles=editingId?[...getBuild(editingId).files]:[];renderFileRows();if(editingId){const b=getBuild(editingId);document.getElementById('f_title').value=b.title;document.getElementById('f_version').value=b.version;document.getElementById('f_short').value=b.shortDesc;document.getElementById('f_full').value=b.fullDesc;document.getElementById('f_image').value=b.image;document.getElementById('f_tags').value=(b.tags||[]).join(', ')}document.getElementById('addFileRow').addEventListener('click',()=>{draftFiles.push({id:genId('f'),name:'',url:'',data:null,size:0,downloads:0});renderFileRows()});document.getElementById('buildForm').addEventListener('submit',onSubmitBuild);document.getElementById('logoutBtn').addEventListener('click',()=>{setAdminAuthed(false);location.hash='#/'});document.getElementById('savePassBtn').addEventListener('click',()=>{const val=document.getElementById('newPass').value.trim();if(val.length<4){toast('Пароль короткий, крипер смеётся');return}setPassword(val);toast('Пароль обновлён')});document.querySelectorAll('[data-edit]').forEach(btn=>btn.addEventListener('click',()=>{editingId=btn.dataset.edit;renderAdminDashboard()}));document.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click',()=>{if(confirm('Удалить сборку? Она не возродится на кровати.')){deleteBuild(btn.dataset.del);if(editingId===btn.dataset.del)editingId=null;renderAdminDashboard()}}));document.getElementById('cancelEdit')?.addEventListener('click',()=>{editingId=null;renderAdminDashboard()})}
++function renderFileRows(){const wrap=document.getElementById('fileRows');if(!wrap)return;if(!draftFiles.length){wrap.innerHTML='<p class="muted">Файлов нет — добавь, а то друзья будут качать воздух.</p>';return}wrap.innerHTML=draftFiles.map((f,i)=>`<div class="file-upload-row"><input placeholder="Имя файла" value="${escapeHtml(f.name)}" data-idx="${i}" class="fr-name"><input type="file" data-idx="${i}" class="fr-file" accept=".zip,.mrpack,.jar,.json"><input placeholder="или files/имя.zip" value="${escapeHtml(f.url||'')}" data-idx="${i}" class="fr-url"><button type="button" class="btn btn-danger btn-sm" data-idx="${i}"><i class="fa-solid fa-xmark"></i></button></div>`).join('');wrap.querySelectorAll('.fr-name').forEach(inp=>inp.addEventListener('input',e=>draftFiles[+e.target.dataset.idx].name=e.target.value));wrap.querySelectorAll('.fr-url').forEach(inp=>inp.addEventListener('input',e=>{draftFiles[+e.target.dataset.idx].url=e.target.value;draftFiles[+e.target.dataset.idx].data=null}));wrap.querySelectorAll('.fr-file').forEach(inp=>inp.addEventListener('change',e=>{const idx=+e.target.dataset.idx,file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{draftFiles[idx].data=reader.result;draftFiles[idx].size=file.size;draftFiles[idx].url='';if(!draftFiles[idx].name)draftFiles[idx].name=file.name;renderFileRows();toast(`Файл «${file.name}» добавлен`)};reader.onerror=()=>toast('Файл не прочитался');reader.readAsDataURL(file)}));wrap.querySelectorAll('button[data-idx]').forEach(btn=>btn.addEventListener('click',e=>{draftFiles.splice(+e.currentTarget.dataset.idx,1);renderFileRows()}))}function onSubmitBuild(e){e.preventDefault();const files=draftFiles.filter(f=>f.name&&(f.url||f.data)).map(f=>({...f,downloads:f.downloads||0}));upsertBuild({id:editingId||genId('b'),title:document.getElementById('f_title').value.trim(),version:document.getElementById('f_version').value.trim(),shortDesc:document.getElementById('f_short').value.trim(),fullDesc:document.getElementById('f_full').value.trim(),image:document.getElementById('f_image').value.trim(),tags:document.getElementById('f_tags').value.split(',').map(t=>t.trim()).filter(Boolean),date:editingId?getBuild(editingId).date:new Date().toISOString().slice(0,10),files});toast(editingId?'Сохранено':'Опубликовано, можно звать банду');editingId=null;renderAdminDashboard()}
+ </script>
+ </body>
+ </html>
